@@ -12,8 +12,8 @@ __pycache__/
 nltk_data/
 
 **.crl
-
-
+**.pickle
+**.key
 
 # Distribution / packaging
 .Python
