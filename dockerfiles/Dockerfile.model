@@ -2,4 +2,7 @@ FROM python:3.11.2-bullseye
 
 # install langchain
 RUN pip install langchain
-RUN pip install chromadb
+RUN pip install openai
+RUN pip install tiktoken
+RUN pip install fastparquet
+RUN pip install qdrant-client
