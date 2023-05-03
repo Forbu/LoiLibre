@@ -20,4 +20,9 @@ Ici nous utilisons les évolutions récentes des modèles de langage (ex : chatG
 
 Les détails du code seront fait plus tard.
 
+Le modèle de l'assistant juridique est simplement chatGPT (via l'API en ligne) couplé à une interface qui permet à chatGPT d'avoir des informations concernant des articles juridiques en lien avec la question posée.
+
+Il s'agit ici d'un modèle simple, dans le futur nous avons plusieurs possibilité autour du fine tuning de modèles open source ou encore d'autres approches. 
+
+
 
