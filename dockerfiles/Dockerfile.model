@@ -6,3 +6,15 @@ RUN pip install openai
 RUN pip install tiktoken
 RUN pip install fastparquet
 RUN pip install qdrant-client
+
+
+
+
+
+
+
+
+
+
+
+
