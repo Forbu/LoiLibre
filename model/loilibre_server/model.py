@@ -15,6 +15,7 @@ from langchain.llms import OpenAI
 
 import qdrant_client
 
+
 def generate_context(query, qdrant):
     """
     Function that will generate the context for the chatGPT model
@@ -28,6 +29,7 @@ def generate_context(query, qdrant):
         context += doc["payload"]["text"] + "\n"
 
     return context
+
 
 def init_model():
     """
@@ -48,17 +50,23 @@ def init_model():
         input_variables=["question", "context"],
         template=None,
     )
-    
-    qa = ConversationalRetrievalChain.from_llm(llm), 
-    
+
     return llm, prompt
 
-def generate_response(context, query, qdrant, llm, prompt):
+
+def generate_response(query, qdrant, llm, prompt):
     """
     Function that will generate the response for the chatGPT model
     """
-    
-    answer 
+    context_list = qdrant.similarity_search_with_score(query, k=4)
+
+    context = "\n".join([doc for doc in context_list])
+
+    resulting_query = prompt.format(question=query, context=context)
+
+    answer = llm.generate(resulting_query)
+
+    return answer
 
 
 def init_vectorstore(path_db, openai_key):
