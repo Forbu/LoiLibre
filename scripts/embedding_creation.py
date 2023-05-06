@@ -4,12 +4,15 @@ We use faiss to create the database and to add the embeddings to the database.
 We use sentence-transformers to create the embeddings.
 """
 
-
 import pickle
 import os
 from tqdm import tqdm
-from sentence_transformers import SentenceTransformer, util
+
+import numpy as np
+
 import faiss
+from sentence_transformers import SentenceTransformer, util
+
 
 
 def create_embeddings(sentence, model):
@@ -56,7 +59,7 @@ def create_faiss_database(embeddings):
     d = 768
 
     # Create an index with the IndexFlatL2 structure
-    index = faiss.IndexFlatL2(d)
+    index = faiss.IndexFlatIP(d)
     index.add(embeddings)
 
     return index
@@ -94,10 +97,15 @@ if __name__ == "__main__":
     # Read the data
     print("Reading the data")
     data = read_data("../data_preprocess/")
+    
+    # for testing 
+    data = data[:100]
 
     # Create embeddings
     print("Creating the embeddings")
     embeddings = compute_embedding_full_text(data, model)
+    
+    embeddings = np.array(embeddings)
 
     # save raw embeddings somewhere (pickle file)
     print("Saving the embeddings")

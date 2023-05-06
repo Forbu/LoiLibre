@@ -8,6 +8,7 @@ __pycache__/
 
 *.pdf
 .DS_Store
+**.index
 
 .vscode-server/
 nltk_data/
