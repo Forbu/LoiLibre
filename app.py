@@ -24,7 +24,7 @@ except:
 list_codes = [
     "code civil",
     "code de commerce",
-    
+    }
 
 theme = gr.themes.Soft(
     primary_hue="sky",
