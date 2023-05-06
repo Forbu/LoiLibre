@@ -99,6 +99,11 @@ if __name__ == "__main__":
     print("Creating the embeddings")
     embeddings = compute_embedding_full_text(data, model)
 
+    # save raw embeddings somewhere (pickle file)
+    print("Saving the embeddings")
+    with open("../embeddings.pickle", "wb") as handle:
+        pickle.dump(embeddings, handle)
+
     # Create the faiss database
     print("Creating the faiss database")
     index = create_faiss_database(embeddings)
