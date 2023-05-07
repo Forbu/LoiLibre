@@ -68,7 +68,7 @@ system_template = {
 # read key.key file and set openai api key
 with open("key.key", "r") as f:
     key = f.read()
-    
+
 # set api_key environment variable
 os.environ["api_key"] = key
 
@@ -196,9 +196,9 @@ def chat(
         max_tokens=128,
         stop=["\n---\n", "<|im_end|>"],
     )
-    
+
     print(reformulated_query)
-    
+
     reformulated_query = reformulated_query["choices"][0]["text"]
     language = "francais"
 
@@ -210,12 +210,8 @@ def chat(
         as_dict=True,
         threshold=threshold,
     )
-    response_retriever = {
-        "language": language,
-        "reformulated_query": reformulated_query,
-        "query": query,
-        "sources": sources,
-    }
+    
+    print(sources)
 
     # docs = [d for d in retriever.retrieve(query=reformulated_query, top_k=10) if d.score > threshold]
     messages = history + [{"role": "user", "content": query}]
