@@ -14,5 +14,5 @@ retriever = EmbeddingRetriever(
     progress_bar=False,
 )
 
-docs = retriever.retrieve("Mort sur la route", top_k=10)
+docs = retriever.retrieve("Syndicaliste et entreprises", top_k=10)
 print(docs)

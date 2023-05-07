@@ -49,6 +49,24 @@ def preprocess_code(path_pdf, path_preprocess):
     for subsection in sections:
         articles.append(" ".join(subsection))
 
+    # for all the articles we cut the text after one of the keywork :
+    # Livre, Titre, Chapitre, Section, Paragraphe, Sous-section, Article
+    cut_keyword = [
+        "Livre",
+        "Titre",
+        "Chapitre",
+        "Section",
+        "Paragraphe",
+        "Sous-section",
+        "Article",
+    ]
+
+    for idx, article in enumerate(articles):
+        for keyword in cut_keyword:
+            if keyword in article:
+                articles[idx] = article.split(keyword)[0]
+                break
+
     # we save all the article in a pickle file
     pickle_filename = path_pdf.split("/")[-1].split(".")[0] + ".pickle"
 

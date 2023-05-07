@@ -80,14 +80,14 @@ def read_data(path):
 def create_documents_list(data, embeddings):
     """
     Function to create the list of documents (for the document store)
-    
+
     params:
         data: list of str (list of article)
         embeddings: np.array (array of embeddings) corresponding to the data
-        
+
     return:
         documents: list of Document (haystack schema)
-    
+
     """
 
     # we create the document
@@ -98,43 +98,49 @@ def create_documents_list(data, embeddings):
 
     return documents
 
+
 def create_faiss_document_store(documents, path_index, path_config):
     """
     Create and save faiss document store
     """
-    document_store=FAISSDocumentStore()
-    document_store.write_documents(documents)
+    document_store = FAISSDocumentStore(duplicate_documents="overwrite", return_embedding=True)
+    document_store.write_documents(documents, duplicate_documents="overwrite")
     document_store.save(index_path=path_index, config_path=path_config)
+
+    return document_store
 
 
 if __name__ == "__main__":
     # Load the model
-    print("Loading the model")
-    model = get_model()
+    # print("Loading the model")
+    # model = get_model()
 
     # Read the data
     print("Reading the data")
     data = read_data("../data_preprocess/")
 
     # for testing
-    data = data[:100]
+    # data = data[:100]
 
-    # Create embeddings
-    print("Creating the embeddings")
-    embeddings = compute_embedding_full_text(data, model)
+    # # Create embeddings
+    # print("Creating the embeddings")
+    # embeddings = compute_embedding_full_text(data, model)
 
-    embeddings = np.array(embeddings)
+    # embeddings = np.array(embeddings)
 
-    # save raw embeddings somewhere (pickle file)
-    print("Saving the embeddings")
-    with open("../embeddings.pickle", "wb") as handle:
-        pickle.dump(embeddings, handle)
+    # # save raw embeddings somewhere (pickle file)
+    # print("Saving the embeddings")
+    # with open("../embeddings.pickle", "wb") as handle:
+    #     pickle.dump(embeddings, handle)
 
-    # Create the documents
-    print("Creating the documents")
-    documents = create_documents_list(data, embeddings)
+    # load pickle file
+    with open("../documents.pickle", "rb") as handle:
+        documents = pickle.load(handle)
 
     # Create the faiss database
     print("Creating the faiss database")
-    index = create_faiss_document_store(documents, "../faiss_index.index", "../faiss_config.json")
-    
+    index = create_faiss_document_store(
+        documents, "../faiss_index.index", "../faiss_config.json"
+    )
+
+    print(index.get_documents_by_id(["0"]))
