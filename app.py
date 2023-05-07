@@ -161,14 +161,11 @@ def make_html_source(source, i):
     return f"""
 <div class="card">
     <div class="card-content">
-        <h2>Doc {i} - {meta['short_name']} - Page {meta['page_number']}</h2>
+        <h2>Doc {i} - </h2>
         <p>{source['content']}</p>
     </div>
     <div class="card-footer">
-        <span>{meta['name']}</span>
-        <a href="{meta['url']}#page={meta['page_number']}" target="_blank" class="pdf-link">
-            <span role="img" aria-label="Open PDF">🔗</span>
-        </a>
+        <span>link to code</span>
     </div>
 </div>
 """
@@ -197,8 +194,6 @@ def chat(
         stop=["\n---\n", "<|im_end|>"],
     )
 
-    print(reformulated_query)
-
     reformulated_query = reformulated_query["choices"][0]["text"]
     language = "francais"
 
@@ -210,8 +205,6 @@ def chat(
         as_dict=True,
         threshold=threshold,
     )
-    
-    print(sources)
 
     # docs = [d for d in retriever.retrieve(query=reformulated_query, top_k=10) if d.score > threshold]
     messages = history + [{"role": "user", "content": query}]
@@ -220,9 +213,7 @@ def chat(
         docs_string = []
         docs_html = []
         for i, d in enumerate(sources, 1):
-            docs_string.append(
-                f"📃 Doc {i}: {d['meta']['short_name']} page {d['meta']['page_number']}\n{d['content']}"
-            )
+            docs_string.append(f"📃 Doc {i}: \n{d['content']}")
             docs_html.append(make_html_source(d, i))
         docs_string = "\n\n".join(
             [f"Query used for retrieval:\n{reformulated_query}"] + docs_string
@@ -310,16 +301,16 @@ with gr.Blocks(title="LoiLibre Q&A", css="style.css", theme=theme) as demo:
 
             examples_questions = gr.Examples(
                 [
-                    "Quelles sont les options légales pour une personne qui souhaite divorcer, notamment en matière de garde d'enfants et de pension alimentaire ?"
-                    "Quelles sont les démarches à suivre pour créer une entreprise et quels sont les risques et les responsabilités juridiques associés ?"
-                    "Comment pouvez-vous m'aider à protéger mes droits d'auteur et à faire respecter mes droits de propriété intellectuelle ?"
-                    "Quels sont mes droits si j'ai été victime de harcèlement au travail ou de discrimination en raison de mon âge, de ma race ou de mon genre ?"
-                    "Quelles sont les conséquences légales pour une entreprise qui a été poursuivie pour négligence ou faute professionnelle ?"
-                    "Comment pouvez-vous m'aider à négocier un contrat de location commercial ou résidentiel, et quels sont mes droits et obligations en tant que locataire ou propriétaire ?"
-                    "Quels sont les défenses possibles pour une personne accusée de crimes sexuels ou de violence domestique ?"
-                    "Quelles sont les options légales pour une personne qui souhaite contester un testament ou un héritage ?"
-                    "Comment pouvez-vous m'aider à obtenir une compensation en cas d'accident de voiture ou de blessure personnelle causée par la négligence d'une autre personne ?"
-                    "Comment pouvez-vous m'aider à obtenir un visa ou un statut de résident permanent aux États-Unis, et quels sont les risques et les avantages associés ?"
+                    "Quelles sont les options légales pour une personne qui souhaite divorcer, notamment en matière de garde d'enfants et de pension alimentaire ?",
+                    "Quelles sont les démarches à suivre pour créer une entreprise et quels sont les risques et les responsabilités juridiques associés ?",
+                    "Comment pouvez-vous m'aider à protéger mes droits d'auteur et à faire respecter mes droits de propriété intellectuelle ?",
+                    "Quels sont mes droits si j'ai été victime de harcèlement au travail ou de discrimination en raison de mon âge, de ma race ou de mon genre ?",
+                    "Quelles sont les conséquences légales pour une entreprise qui a été poursuivie pour négligence ou faute professionnelle ?",
+                    "Comment pouvez-vous m'aider à négocier un contrat de location commercial ou résidentiel, et quels sont mes droits et obligations en tant que locataire ou propriétaire ?",
+                    "Quels sont les défenses possibles pour une personne accusée de crimes sexuels ou de violence domestique ?",
+                    "Quelles sont les options légales pour une personne qui souhaite contester un testament ou un héritage ?",
+                    "Comment pouvez-vous m'aider à obtenir une compensation en cas d'accident de voiture ou de blessure personnelle causée par la négligence d'une autre personne ?",
+                    "Comment pouvez-vous m'aider à obtenir un visa ou un statut de résident permanent aux États-Unis, et quels sont les risques et les avantages associés ?",
                 ],
                 [ask_examples_hidden],
             )

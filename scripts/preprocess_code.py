@@ -62,10 +62,13 @@ def preprocess_code(path_pdf, path_preprocess):
     ]
 
     for idx, article in enumerate(articles):
+        current_article = article
+
         for keyword in cut_keyword:
-            if keyword in article:
-                articles[idx] = article.split(keyword)[0]
-                break
+            if keyword in current_article:
+                current_article = current_article.split(keyword)[0]
+
+        articles[idx] = current_article
 
     # we save all the article in a pickle file
     pickle_filename = path_pdf.split("/")[-1].split(".")[0] + ".pickle"
@@ -82,7 +85,6 @@ def preprocess_code(path_pdf, path_preprocess):
     # we save all the article in a pickle file
     with open(path_preprocess + pickle_filename, "wb") as handle:
         pickle.dump(articles, handle)
-
 
 if __name__ == "__main__":
     PATH_PDF = "../data_pdf"
