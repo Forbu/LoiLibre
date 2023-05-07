@@ -11,3 +11,5 @@ RUN pip install swig
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
+# expose port for gradio app
+EXPOSE 7860
