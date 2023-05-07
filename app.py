@@ -12,7 +12,6 @@ from utils import (
 )
 import numpy as np
 from datetime import datetime
-from azure.storage.fileshare import ShareServiceClient
 
 try:
     from dotenv import load_dotenv
@@ -21,10 +20,7 @@ try:
 except:
     pass
 
-list_codes = [
-    "code civil",
-    "code de commerce",
-    }
+list_codes = []
 
 theme = gr.themes.Soft(
     primary_hue="sky",
@@ -58,14 +54,13 @@ system_template = {
 }
 
 openai.api_type = "azure"
-openai.api_key = os.environ["api_key"]
-openai.api_base = os.environ["ressource_endpoint"]
+openai.api_key = 0#os.environ["api_key"]
+openai.api_base = 0#os.environ["ressource_endpoint"]
 openai.api_version = "2022-12-01"
 
 retriever = EmbeddingRetriever(
     document_store=FAISSDocumentStore.load(
-        index_path="./loilibre.faiss",
-        config_path="./loilibre.json",
+        index_path="faiss_database/faiss_database.index",
     ),
     embedding_model="sentence-transformers/multi-qa-mpnet-base-dot-v1",
     model_format="sentence_transformers",

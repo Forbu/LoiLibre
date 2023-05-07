@@ -13,6 +13,9 @@ import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer, util
 
+from haystack.document_stores import FAISSDocumentStore
+from haystack.nodes import EmbeddingRetriever
+from haystack.schema import Document, FilterType
 
 
 def create_embeddings(sentence, model):
@@ -50,21 +53,6 @@ def get_model():
     return model
 
 
-def create_faiss_database(embeddings):
-    """
-    function to initialize the faiss database
-    """
-
-    # Define the size of your embedding vectors
-    d = 768
-
-    # Create an index with the IndexFlatL2 structure
-    index = faiss.IndexFlatIP(d)
-    index.add(embeddings)
-
-    return index
-
-
 def read_data(path):
     """
     Read the data from the pickle files.
@@ -89,6 +77,36 @@ def read_data(path):
     return data
 
 
+def create_documents_list(data, embeddings):
+    """
+    Function to create the list of documents (for the document store)
+    
+    params:
+        data: list of str (list of article)
+        embeddings: np.array (array of embeddings) corresponding to the data
+        
+    return:
+        documents: list of Document (haystack schema)
+    
+    """
+
+    # we create the document
+    documents = []
+    for idx, article in enumerate(data):
+        document = Document(content=article, embedding=embeddings[idx, :], id=idx)
+        documents.append(document)
+
+    return documents
+
+def create_faiss_document_store(documents, path_index, path_config):
+    """
+    Create and save faiss document store
+    """
+    document_store=FAISSDocumentStore()
+    document_store.write_documents(documents)
+    document_store.save(index_path=path_index, config_path=path_config)
+
+
 if __name__ == "__main__":
     # Load the model
     print("Loading the model")
@@ -97,14 +115,14 @@ if __name__ == "__main__":
     # Read the data
     print("Reading the data")
     data = read_data("../data_preprocess/")
-    
-    # for testing 
+
+    # for testing
     data = data[:100]
 
     # Create embeddings
     print("Creating the embeddings")
     embeddings = compute_embedding_full_text(data, model)
-    
+
     embeddings = np.array(embeddings)
 
     # save raw embeddings somewhere (pickle file)
@@ -112,10 +130,11 @@ if __name__ == "__main__":
     with open("../embeddings.pickle", "wb") as handle:
         pickle.dump(embeddings, handle)
 
+    # Create the documents
+    print("Creating the documents")
+    documents = create_documents_list(data, embeddings)
+
     # Create the faiss database
     print("Creating the faiss database")
-    index = create_faiss_database(embeddings)
-
-    # Save the faiss database
-    print("Saving the faiss database")
-    faiss.write_index(index, "../faiss_database/faiss_database.index")
+    index = create_faiss_document_store(documents, "../faiss_index.index", "../faiss_config.json")
+    
