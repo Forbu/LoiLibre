@@ -115,23 +115,23 @@ if __name__ == "__main__":
     print("Loading the model")
     model = get_model()
 
-    # Read the data
-    print("Reading the data")
-    data = read_data("../data_preprocess/")
+    # # Read the data
+    # print("Reading the data")
+    # data = read_data("../data_preprocess/")
 
-    # for testing
-    # data = data[:100]
+    # # for testing
+    # # data = data[:100]
 
-    # # Create embeddings
-    print("Creating the embeddings")
-    embeddings = compute_embedding_full_text(data, model)
+    # # # Create embeddings
+    # print("Creating the embeddings")
+    # embeddings = compute_embedding_full_text(data, model)
 
-    embeddings = np.array(embeddings)
+    # embeddings = np.array(embeddings)
 
-    # # save raw embeddings somewhere (pickle file)
-    print("Saving the embeddings")
-    with open("../embeddings.pickle", "wb") as handle:
-        pickle.dump(embeddings, handle)
+    # # # save raw embeddings somewhere (pickle file)
+    # print("Saving the embeddings")
+    # with open("../embeddings.pickle", "wb") as handle:
+    #     pickle.dump(embeddings, handle)
 
     # load pickle file
     with open("../documents.pickle", "rb") as handle:

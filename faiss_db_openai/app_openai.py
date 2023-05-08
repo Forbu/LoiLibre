@@ -81,9 +81,10 @@ retriever = EmbeddingRetriever(
         index_path="faiss_index.index",
         config_path="faiss_config.json",
     ),
-    embedding_model="sentence-transformers/multi-qa-mpnet-base-dot-v1",
-    model_format="sentence_transformers",
+    embedding_model="text-embedding-ada-002",
+    model_format="openai",
     progress_bar=False,
+    api_key=os.environ["api_key"],
 )
 
 
@@ -127,7 +128,7 @@ def retrieve_with_summaries(
     k_total=10,
     source="ipcc",
     max_k=100,
-    threshold=0.555,
+    threshold=0.49,
     as_dict=True,
 ):
     """
@@ -175,7 +176,7 @@ def chat(
     user_id: str,
     query: str,
     history: list = [system_template],
-    threshold: float = 0.555,
+    threshold: float = 0.49,
 ) -> tuple:
     """retrieve relevant documents in the document store then query gpt-turbo
     Args:

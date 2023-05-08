@@ -127,7 +127,7 @@ def create_faiss_document_store(documents, path_index, path_config):
     Create and save faiss document store
     """
     document_store = FAISSDocumentStore(
-        duplicate_documents="overwrite", return_embedding=True
+        duplicate_documents="overwrite", return_embedding=True, embedding_dim=1536
     )
     document_store.write_documents(documents, duplicate_documents="overwrite")
     document_store.save(index_path=path_index, config_path=path_config)
@@ -154,9 +154,17 @@ if __name__ == "__main__":
     with open("../embeddings.pickle", "wb") as handle:
         pickle.dump(embeddings, handle)
 
+    # load pickle file
+    with open("../embeddings.pickle", "rb") as handle:
+        embeddings = pickle.load(handle)
+
     # # Create the documents
     print("Creating the documents")
     documents = create_documents_list(data, embeddings)
+    
+    # # save documents somewhere (pickle file)
+    with open("../documents.pickle", "wb") as handle:
+        pickle.dump(documents, handle)
 
     # load pickle file
     with open("../documents.pickle", "rb") as handle:
