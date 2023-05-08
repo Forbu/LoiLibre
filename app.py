@@ -318,6 +318,8 @@ with gr.Blocks(title="LoiLibre Q&A", css="style.css", theme=theme) as demo:
         with gr.Column(scale=1, variant="panel"):
             gr.Markdown("### Sources")
             sources_textbox = gr.Markdown(show_label=False)
+            
+        
 
     ask.submit(
         fn=chat,
@@ -332,11 +334,18 @@ with gr.Blocks(title="LoiLibre Q&A", css="style.css", theme=theme) as demo:
         outputs=[chatbot, state, sources_textbox],
     )
 
-    gr.Markdown(
-        """## Comment utiliser LoiLibre Q&A ?
-                Pose simplement ta question dans la boîte de dialogue ci-dessus.
+    with gr.Row():
+        with gr.Column(scale=1):
+            gr.Markdown(
                 """
-    )
+                <div class="warning-box">
+                Version 0.2-beta - This tool is under active development
+                </div>
+                """)
+            gr.Markdown(
+                """
+                
+                """)
 
     demo.queue(concurrency_count=16)
 
