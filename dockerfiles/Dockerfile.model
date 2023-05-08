@@ -1,21 +1,15 @@
-FROM python:3.11.2-bullseye
+FROM python:3.9-bullseye
+RUN apt-get update -y
+RUN apt-get install build-essential -y
+RUN apt-get install doxygen -y
 
-# install langchain
-RUN pip install langchain
-RUN pip install openai
-RUN pip install tiktoken
-RUN pip install fastparquet
-RUN pip install qdrant-client
-RUN pip install poetry
+RUN apt-get install swig -y
 
+RUN pip install --upgrade pip
 
+RUN pip install swig
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 
-
-
-
-
-
-
-
-
-
+# expose port for gradio app
+EXPOSE 7860
